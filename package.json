@@ -1,15 +1,24 @@
 {
-  "name": "tsp",
+  "name": "simple-tx-sender",
+  "description": "A simple wrapper of Web3 for sending transaction to Ethereum",
   "version": "1.0.0",
-  "description": "",
   "main": "out/index.js",
+  "types": "out/index.d.ts",
+  "files": [
+    "out/"
+  ],
+  "keywords": [],
+  "author": "liangqin.fan",
+  "mail": "liangqin.fan@gmail.com",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oldmanfan/simple-tx-sender"
+  },
   "scripts": {
     "start": "tsc && node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "tslint": "^6.1.2",
     "typescript": "^3.9.5"
