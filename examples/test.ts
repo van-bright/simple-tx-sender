@@ -1,1094 +1,89 @@
-import {TxSender} from ".."
+import {ETHContract} from "../src";
 
 const ContractAbi = [
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "minter",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "dataes",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32[]",
-        "name": "labels",
-        "type": "bytes32[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "minthash",
-        "type": "bytes32"
+        "internalType": "string",
+        "name": "_greeting",
+        "type": "string"
       }
     ],
-    "name": "CouponBatchMinted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "CouponBatchTransfered",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "reason",
-        "type": "uint8"
-      }
-    ],
-    "name": "CouponBurned",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "target",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "usedCoupons",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "card721Id",
-        "type": "uint256"
-      }
-    ],
-    "name": "CouponCombined",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "minter",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "data",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "label",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "minthash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "CouponMinted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "who",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "CouponTransfered",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "CouponUsed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "boxId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "reason",
-        "type": "uint8"
-      }
-    ],
-    "name": "LuckyBoxMinted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "boxId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "mintedCouponId",
-        "type": "uint256"
-      }
-    ],
-    "name": "LuckyBoxOpened",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "boxIds",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "boxAmounts",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "LuckyBoxTransfered",
-    "type": "event"
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
   {
     "inputs": [],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+    "name": "getPerson",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "admin",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "asAdmin",
-        "type": "bool"
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "age",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Greeter.Person",
+        "name": "",
+        "type": "tuple"
       }
     ],
-    "name": "setAdmins",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "relayer",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "asrelayer",
-        "type": "bool"
-      }
-    ],
-    "name": "setRelayer",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "getContractOwner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "min",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "max",
-        "type": "uint256"
-      }
-    ],
-    "name": "setUsableLimitValue",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getUsableLimitValue",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "min",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "max",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "fp",
-        "type": "address"
-      }
-    ],
-    "name": "setFuturePerpetual",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "fp1155",
-        "type": "address"
-      }
-    ],
-    "name": "setErc1155Address",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "fp721",
-        "type": "address"
-      }
-    ],
-    "name": "setErc721Address",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getCouponInfo",
+    "name": "getPersons",
     "outputs": [
       {
         "components": [
           {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
           },
           {
             "internalType": "uint256",
-            "name": "data",
+            "name": "age",
             "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "limitMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "limitMax",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "label",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bool",
-            "name": "transferable",
-            "type": "bool"
           }
         ],
-        "internalType": "struct FpNFT.Coupon",
+        "internalType": "struct Greeter.Person[]",
         "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "data",
-        "type": "uint256"
-      }
-    ],
-    "name": "setCouponData",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "transferable",
-        "type": "bool"
-      }
-    ],
-    "name": "setTransferables",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getTransferables",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMintableAmount",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getMintableAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getMintedAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "minter",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getMinterMintedAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "minter",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMinterMintableAmount",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "minter",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getMinterMintableAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getIsCouponUsable",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "positionValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "getIsValueFullfilled",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "dataes",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "bytes32[]",
-        "name": "labels",
-        "type": "bytes32[]"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "minthash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "batchMint",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "data",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "label",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "minthash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "mint",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "condition",
-        "type": "uint256"
-      }
-    ],
-    "name": "useCoupon",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferCoupon",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "coupons",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "condition",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "couponFunc",
-        "type": "uint8"
-      }
-    ],
-    "name": "checkCoupons",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint8",
-        "name": "ranges",
-        "type": "uint8"
-      }
-    ],
-    "name": "setMaxLuckyBoxRanges",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "boxId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "index",
-        "type": "uint8"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint8",
-            "name": "rangeStart",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "rangeEnd",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint16",
-            "name": "maxCount",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "mintedCount",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "data",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "label",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct FpNFT.LuckyBoxMetaData",
-        "name": "params",
-        "type": "tuple"
-      }
-    ],
-    "name": "setLuckyBoxMetaData",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "boxId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "index",
-        "type": "uint8"
-      }
-    ],
-    "name": "getLuckyBoxMetaData",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint8",
-            "name": "rangeStart",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "rangeEnd",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint16",
-            "name": "maxCount",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "mintedCount",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "data",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "label",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct FpNFT.LuckyBoxMetaData",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "target",
-        "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint8",
-            "name": "func",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "identity",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "amount",
-            "type": "uint8"
-          }
-        ],
-        "internalType": "struct FpNFT.CombinedMetaData[]",
-        "name": "metas",
         "type": "tuple[]"
       }
     ],
-    "name": "setCombinedMetaData",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "greet",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_greeting",
+        "type": "string"
+      }
+    ],
+    "name": "setGreeting",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1096,22 +91,24 @@ const ContractAbi = [
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "boxIds",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "boxAmounts",
-        "type": "uint256[]"
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "age",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Greeter.Person",
+        "name": "p",
+        "type": "tuple"
       }
     ],
-    "name": "transferLuckyBox",
+    "name": "setPerson",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1119,80 +116,55 @@ const ContractAbi = [
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "boxId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "reason",
-        "type": "uint8"
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "age",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Greeter.Person[]",
+        "name": "ps",
+        "type": "tuple[]"
       }
     ],
-    "name": "mintLuckyBox",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "boxId",
-        "type": "uint256"
-      }
-    ],
-    "name": "openLuckyBox",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "target",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "couponIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "combineCoupon",
+    "name": "setPersons",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   }
 ];
 
-const ContractAddresss = '0x74E96eF83AC62550f23A4780Dd31E4d533b1b76f';
+const ContractAddresss = '0x038a790aDae18Babf0dE5dB00F79b4eF5Dc2A435';
 
-const privateKey = '0x5e001.......';
-
-let sender = new TxSender("https://http-testnet.hecochain.com", ContractAbi, ContractAddresss, privateKey);
-
-async function getCoupon(id: string) {
-  // 调用合约的view方法 `getCouponInfo`
-  let receipt = await sender.query('getCouponInfo', id);
-  console.log('getCouponInfo: ', JSON.stringify(receipt));
-}
-
-async function setCoupon(id: string, data: number) {
-  // 调用合约的非view方法 `setCoupon`
-  let receipt = await sender.call('setCoupon', id, data);
-  console.log('setCoupon: ', JSON.stringify(receipt));
-}
-
+const privateKey = '0x5e001071c1bcd43e97d45d9629245d1a1dfc19dc0108c8b902f81a8a8fc25b7d';
+const hhNodeUrl = 'https://http-testnet.hecochain.com';
 
 async function main() {
-  await getCoupon('2427314819224845427292416');
+  let greeter = ETHContract.from(ContractAddresss, ContractAbi).by(privateKey).at(hhNodeUrl).init();
+
+  let receipt = await greeter.setGreeting("hello simple tx contract");
+  console.log("setNan.txHash: ", receipt.transactionHash);
+
+  receipt = await greeter.setPerson(["Newton", 1200]);
+  console.log("setPerson.txHash: ", receipt.transactionHash);
+
+  receipt = await greeter.setPersons([["Newton", 1200], ["Tesla", 200], ["Maxswell", 400]]);
+  console.log("setPersons.txHash: ", receipt.transactionHash);
+
+  receipt = await greeter.greet();
+  console.log("getNan: ", receipt);
+
+  receipt = await greeter.getPerson();
+  console.log("getPerson: ", receipt);
+
+  receipt = await greeter.getPersons();
+  console.log("getPersons: ", receipt);
 }
 
 main().then(() => { }).catch(e => console.log(e));

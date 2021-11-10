@@ -1,11 +1,11 @@
 {
-  "name": "simple-tx-sender",
+  "name": "simple-eth-contract",
   "description": "A simple wrapper of Web3 for sending transaction to Ethereum",
   "version": "1.0.0",
-  "main": "out/index.js",
-  "types": "out/index.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "files": [
-    "out/"
+    "build/"
   ],
   "keywords": [],
   "author": "liangqin.fan",
